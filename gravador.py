@@ -7,6 +7,8 @@ def  main():
     LIMITE = FPS * 60 * 1
     TEMPO_PERSISTENCIA = 1 # Segundos
     rodando = True
+    TIME_LAPSE = 20 # Segundos
+    print("1.1 Iniciando.....")
 
     cap = cv.VideoCapture(0)
     if not cap.isOpened():
@@ -32,6 +34,7 @@ def  main():
             """)
 
         frames = 0
+        f = 0
         ret, frame = cap.read()
         largura = frame.shape[1]
         altura = frame.shape[0]
@@ -42,6 +45,7 @@ def  main():
             hora = time.strftime("%d-%m-%Y %H:%M:%S", time.localtime())
             # Capture frame-by-frame
             ret, frame = cap.read()
+            f += 1
             #print(frame.shape)
             # if frame is read correctly ret is True
             if not ret:
@@ -64,7 +68,7 @@ def  main():
             if maximo > 100:
                 persistencia = TEMPO_PERSISTENCIA * FPS
 
-            if persistencia > 0:
+            if persistencia > 0 or f % (TIME_LAPSE * FPS) == 0:
                 persistencia -= 1
                 cv.circle(frame, (20, 20), 5, (0, 0, 255), -1)
                 cv.imshow('Imagem', frame)
@@ -72,6 +76,7 @@ def  main():
 
                 out.write(frame)
                 frames += 1
+                f = 0
                 if frames >= LIMITE:
                     out.release()
                     break
