@@ -33,8 +33,8 @@ def  main():
 
         frames = 0
         ret, frame = cap.read()
-        largura = frame.shape[0]
-        altura = frame.shape[1]
+        largura = frame.shape[1]
+        altura = frame.shape[0]
         out = cv.VideoWriter(".." + os.sep + "arquivos" + os.sep + "videos_sensor_de_movimento" + os.sep + time.strftime("%Y%m%d%H%M%S.avi", time.localtime()), fourcc, FPS, (largura,  altura))
 
         persistencia = 0
