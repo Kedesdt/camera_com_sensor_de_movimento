@@ -1,0 +1,3 @@
+import gravador
+
+gravador.main()
