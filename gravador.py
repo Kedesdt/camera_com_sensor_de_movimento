@@ -4,7 +4,7 @@ import time, os
 
 def  main():
     FPS = 30.0
-    LIMITE = FPS * 60 * 3
+    LIMITE = FPS * 60 * 1
     TEMPO_PERSISTENCIA = 1 # Segundos
     rodando = True
 
@@ -32,7 +32,10 @@ def  main():
             """)
 
         frames = 0
-        out = cv.VideoWriter(".." + os.sep + "arquivos" + os.sep + "videos_sensor_de_movimento" + os.sep + time.strftime("%Y%m%d%H%M%S.avi", time.localtime()), fourcc, FPS, (640,  480))
+        ret, frame = cap.read()
+        largura = frame.shape[0]
+        altura = frame.shape[1]
+        out = cv.VideoWriter(".." + os.sep + "arquivos" + os.sep + "videos_sensor_de_movimento" + os.sep + time.strftime("%Y%m%d%H%M%S.avi", time.localtime()), fourcc, FPS, (largura,  altura))
 
         persistencia = 0
         while rodando:
