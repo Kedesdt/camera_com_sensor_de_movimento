@@ -1,15 +1,19 @@
 import numpy as np
 import cv2 as cv
-import time, os
+import time, os, json
 
 def  main():
-    FPS = 30.0
-    LIMITE = FPS * 60 * 1
-    TEMPO_PERSISTENCIA = 1 # Segundos
-    rodando = True
-    TIME_LAPSE = 20 # Segundos
+
+    config = json.loads(open("config.json", "r").read())
+
+    FPS = config['FPS']
+    LIMITE = config['LIMITE'] * 60 * FPS
+    TEMPO_PERSISTENCIA = config['TEMPO_PERSISTENCIA'] # Segundos
+    TIME_LAPSE = config['TIME_LAPSE'] # Segundos
     TEMPO_ESPERA = 1 / FPS
-    print("1.2 Iniciando.....")
+    print("1.2 Iniciando.....\nFPS:", FPS)
+
+    rodando = True
 
     cap = cv.VideoCapture(0)
     if not cap.isOpened():

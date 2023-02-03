@@ -1,7 +1,7 @@
 import sys
 from cx_Freeze import setup, Executable
 
-build_exe_options = {'packages': ['numpy'], "include_files": ['gravador.py']}
+build_exe_options = {'packages': ['numpy'], "include_files": ['gravador.py', "constantes.py", 'config.json']}
 
 exe = Executable(script='run.py', base=None)
 

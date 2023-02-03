@@ -1,13 +1,19 @@
 import numpy as np
 import cv2 as cv
-import time, os
+import time, os, json
 
 def  main():
-    FPS = 30.0
-    LIMITE = FPS * 60 * 1
-    TEMPO_PERSISTENCIA = 1 # Segundos
+
+    config = json.loads(open("config.json", "r").read())
+
+    FPS = config['FPS']
+    LIMITE = config['LIMITE'] * 60 * FPS
+    TEMPO_PERSISTENCIA = config['TEMPO_PERSISTENCIA'] # Segundos
+    TIME_LAPSE = config['TIME_LAPSE'] # Segundos
+    TEMPO_ESPERA = 1 / FPS
+    print("1.2 Iniciando.....\nFPS:", FPS)
+
     rodando = True
-    TIME_LAPSE = 20 # Segundos
 
     cap = cv.VideoCapture(0)
     if not cap.isOpened():
@@ -25,8 +31,8 @@ def  main():
 
         print("""
         Iniciando.....
-        Os arquivos são alvos em videos de 3 minutos,
-        para salvar o vídeo atual altes dos 3 minutos
+        Os arquivos são alvos em videos de 1 minutos,
+        para salvar o vídeo atual altes dos 1 minutos
         pressione "s"
         para terminar pressione "q"
     
@@ -38,6 +44,8 @@ def  main():
         largura = frame.shape[1]
         altura = frame.shape[0]
         out = cv.VideoWriter(".." + os.sep + "arquivos" + os.sep + "videos_sensor_de_movimento" + os.sep + time.strftime("%Y%m%d%H%M%S.avi", time.localtime()), fourcc, FPS, (largura,  altura))
+
+        tempo = time.time()
 
         persistencia = 0
         while rodando:
@@ -81,7 +89,15 @@ def  main():
                     break
             else:
                 cv.imshow('Imagem', frame)
-            key = cv.waitKey(30)
+
+            t1 = time.time() - tempo
+            t2 = (TEMPO_ESPERA - t1)
+            if t2 < 0.001:
+                t2 = 0.001
+                print("FPS Muito alto para o processamento do computador!!!\n Tempo passado: ", t1)
+            key = cv.waitKey(int(t2 * 1000))
+
+            tempo = time.time()
 
             if key == ord('q'):
                 rodando = False
